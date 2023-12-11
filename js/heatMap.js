@@ -171,8 +171,8 @@ class Heatmap {
                 .attr("x", vis.width/2)
                 .attr("y", -1)
                 .attr("text-anchor", "middle") // Center the text horizontally
-                .style("font-size", "12px") // Adjust the font size as needed
-                .text("Solar Generation Across Region and Time"); // Set the title text        
+                .style("font-size", "10px") // Adjust the font size as needed
+                .text("Solar Generation Across Time and Regions of Selected States and Time"); // Set the title text        
 
             // Use selectAll to select existing rectangles, and then join the data
             const rects = vis.chart
