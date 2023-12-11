@@ -76,7 +76,7 @@ class ScoreCalculator {
             console.log(waterUsage);              
 
 
-            const weights = { evCount: 0.8, solarCount: 0.6, waterUsage: 0.2};
+            const weights = { evCount: 0.8, solarCount: 0.8, waterUsage: 0.5};
 
             const normalizedEvCount = evCount / maxEvCount;
             const normalizedSolarCount = solarCount / maxSolarCount;

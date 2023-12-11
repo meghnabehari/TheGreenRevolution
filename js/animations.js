@@ -1,4 +1,7 @@
+/* 
+HANDLES FULL PAGE, TYPING, AND COUNTUP JS FEATURES
 
+*/
 
 new fullpage('#fullpage', {
   autoScrolling:true,

@@ -7,58 +7,55 @@ This webpage provides an overview of various sustainaiblity measures in the Unit
 
 And an overall assessment of the sustainability of each state
 
-## Description
-
-
 ## Getting Started
 
-### Dependencies
+### To View Webpage
 
-* Describe any prerequisites, libraries, OS version, etc., needed before installing program.
-* ex. Windows 10
-
-### Installing
-
-* How/where to download your program
-* Any modifications needed to be made to files/folders
+* Navigate to https://meghnabehari.github.io/TheGreenRevolution/ to view the webpage
 
 ### Executing program
 
-* How to run the program
-* Step-by-step bullets
-```
-code blocks for commands
-```
+* To make any modifications to the files/folders: 
+    * Download this entire project
+    * Use WebStore or VSCode LiveServer to live run updates
 
 ## Help
 
-Any advise for common problems or issues.
-```
-command to run if program contains helper info
-```
+Use Chrome for the best performance
+- Some tooltips do not have optimized performance on other browsers
 
 ## Authors
 
-Contributors names and contact info
+Meghna Behari 
+[meghnabehari@college.harvard.edu]
 
-ex. Dominique Pizzie  
-ex. [@DomPizzie](https://twitter.com/dompizzie)
+Anjali Palepu 
+[apalepu@college.harvard.edu]
+
+Sanjna Kedia
+[sanjnakedia@college.harvard.edu]
+
 
 ## Version History
-
+* 0.4-0.6
+    * Structure optimized
+    * Finalized all linking and interactions
+    * Storytelling elements added
+* 0.3
+    * 90% Prototype done
+    * Dashboard created
+    * Innovative visualization done
 * 0.2
-    * Various bug fixes and optimizations
-    * See [commit change]() or See [release history]()
+    * Initial Prototype
+    * Some visualizations done
+    * Webpage structure created
 * 0.1
     * Initial Prototype
-    * 
+    * Storyboard and visualizations plan
 
 
-## Acknowledgments
+## Other
 
-Inspiration, code snippets, etc.
-* [awesome-readme](https://github.com/matiassingers/awesome-readme)
-* [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
-* [dbader](https://github.com/dbader/readme-template)
-* [zenorocha](https://gist.github.com/zenorocha/4526327)
-* [fvcproductions](https://gist.github.com/fvcproductions/1bfc2d4aecb01a834b46)
+Alternate libraries used
+* [fullPage.js](https://alvarotrigo.com/fullPage/)
+* [CountUp.js](https://inorganik.github.io/countUp.js/)

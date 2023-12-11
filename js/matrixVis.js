@@ -1,3 +1,11 @@
+/* * * * * * * * * * * * * *
+*          DotMatrix       *
+* * * * * * * * * * * * * */
+/*
+ * DotMatrix class for representing and visualizing data using a dot matrix layout.
+ */
+
+
 class DotMatrix {
 
     constructor(parentElement, data){
@@ -6,6 +14,9 @@ class DotMatrix {
         this.initVis();
     }
 
+    /**
+     * Initializes the visualization by setting up the SVG container and other visual elements.
+     */
     initVis() {
         let vis = this;
 
@@ -19,29 +30,38 @@ class DotMatrix {
             .attr("height", vis.height)
             .attr('transform', `translate (${vis.margin.left}, ${vis.margin.top})`);
 
-        vis.dotPadding = 0.2; // Space between dots
+        vis.dotPadding = 0.2; 
 
       
         vis.wrangleData();
     }
 
+    /**
+     * Data wrangling method to process and prepare data for visualization.
+     */
     wrangleData() {
         let vis = this;
     
         vis.displayData = {};
     
+        // Process each category in the data
         Object.keys(vis.data).forEach(category => {
             let total = vis.data[category].total;
     
+
+            // Base setup for dots representation
             let baseDots = {
                 "IrMic": 1,
                 "IrSpr": 1,
                 "IrSur": 1
             };
-    
+
+
+            // Calculating the remaining dots and their distribution
             let remainingDots = 32 - Object.keys(baseDots).length; 
             let remainingPercent = 1 - (Object.keys(baseDots).length / 32);
     
+            // Assigning dots to each subcategory based on their proportion
             Object.keys(vis.data[category]).forEach(subcategory => {
                 if (subcategory !== 'total') {
                     let subcategoryPercent = vis.data[category][subcategory] / total;
@@ -50,6 +70,7 @@ class DotMatrix {
                 }
             });
     
+            // Adjusting the dot count to fit the total limit
             let dotsArray = Object.values(baseDots);
             let dotsSum = dotsArray.reduce((a, b) => a + b, 0);
             while (dotsSum > 32) {
@@ -68,7 +89,10 @@ class DotMatrix {
         vis.updateVis();
     }
     
-    
+     /**
+     * Update the visualization with new data.
+     * This method is responsible for drawing the visual elements based on the processed data.
+     */
     updateVis() {
         let vis = this;
 
@@ -113,7 +137,7 @@ class DotMatrix {
         vis.subcategoryNameText = vis.svg.append("text")
         .attr("id", "subcategory-name-text")
         .attr("x", vis.width / 2)
-        .attr("y", legendY + rectHeight + 53) 
+        .attr("y", legendY + rectHeight + 10) 
         .attr("text-anchor", "middle") 
         .attr("font-size", "25px") 
         .attr("font-weight", "bold")
@@ -134,7 +158,7 @@ class DotMatrix {
     
         legend.append("rect")
             .attr("width", rectWidth)
-            .attr("height", rectHeight)
+            .attr("height", rectHeight - 20)
             .style("fill", d => d.color)
             .style("stroke", "black")
             .style("stroke-width", "2px")
@@ -153,8 +177,8 @@ class DotMatrix {
             });
     
         legend.append("text")
-            .attr("x", rectWidth - 80)
-            .attr("y", rectHeight - 25)
+            .attr("x", rectWidth - 85)
+            .attr("y", rectHeight - 35)
             .attr("fill", "#EFEFEF")
             .text(d => d.label)
             .on("click", function(event, d) {
@@ -163,34 +187,33 @@ class DotMatrix {
                     .text(`${d.label} irrigation in the United States is used for...`)
                     .style("fill", d.color); 
             });
-    
+
+        // Calculate dynamic dimensions based on container size or screen size
         let rows = 4;
         let cols = 8;
-    
-        let spacing = 25;
-        let matrixPadding = 18;
-        let dotRadius = 8; 
-        let borderWidth = 1; 
+        let spacing = Math.min(vis.height, vis.width) / (2 * Math.max(rows, cols));
+        let matrixPadding = spacing / 2;
+        let dotRadius = spacing / 3;
+        let borderWidth = 1;
 
+        // Calculate the totalMatrixWidth and totalMatrixHeight based on data and dynamic dimensions
         let totalMatrixWidth = cols * spacing;
-        let totalMatrixHeight = (rows * spacing + matrixPadding) * Object.keys(vis.displayData).length - matrixPadding; 
-    
-        let startX = (vis.width - totalMatrixWidth) / 2 - 55;
-        let startY = (vis.height - totalMatrixHeight + 70)
+        let totalMatrixHeight = (rows * spacing + matrixPadding) * Object.keys(vis.displayData).length - matrixPadding;
+
+        let startX = (vis.width - totalMatrixWidth) / 2;
+        let startY = (vis.height - totalMatrixHeight + 20);
 
         const categoryNames = {
             "IR": "residential land",
             "IC": "agriculture",
             "IG": "golf courses"
         };
-    
+
         Object.keys(vis.displayData).forEach((category, categoryIndex) => {
-            
             let subcategoryData = vis.displayData[category];
             let dotIndex = 0;
-    
-            Object.keys(subcategoryData).forEach(subcategory => {
 
+            Object.keys(subcategoryData).forEach(subcategory => {
                 let color;
                 if (subcategory === "IrMic") {
                     color = "#6D7048";
@@ -198,61 +221,54 @@ class DotMatrix {
                     color = "#143109";
                 } else {
                     color = "#9E788F";
-                    
                 }
 
-
                 for (let i = 0; i < subcategoryData[subcategory]; i++) {
-                    let col = dotIndex % cols; 
-                    let row = Math.floor(dotIndex / cols); 
-    
+                    let col = dotIndex % cols;
+                    let row = Math.floor(dotIndex / cols);
 
                     let x = startX + col * spacing;
                     let y = startY + categoryIndex * (rows * spacing + matrixPadding) + row * spacing;
-    
-    
+
                     vis.svg.append("circle")
                         .attr("cx", x)
                         .attr("cy", y)
-                        .attr("r", dotRadius) 
+                        .attr("r", dotRadius)
                         .attr("fill", color)
                         .attr("stroke-width", borderWidth)
                         .on("mouseover", function(event, d) {
                             d3.selectAll('circle')
-                              .style('opacity', o => o.subcategory === d.subcategory ? 1 : 0.1);
+                                .style('opacity', o => o.subcategory === d.subcategory ? 1 : 0.1);
                         })
                         .on("mouseout", function() {
                             d3.selectAll('circle').style('opacity', 1);
                         });
-                
-    
+
                     dotIndex++;
                 }
-    
+
                 if (dotIndex % cols === 0 && dotIndex !== 0) {
                     dotIndex = categoryIndex * rows * cols;
                 }
             });
 
-            let displayName = categoryNames[category] || category; 
-
+            let displayName = categoryNames[category] || category;
 
             let irSurDots = vis.displayData[category]["IrSur"];
             let totalDots = vis.displayData[category]["IrMic"] + vis.displayData[category]["IrSpr"] + vis.displayData[category]["IrSur"];
-            let irSurPercentage = Math.round(((irSurDots / totalDots) * 100));  
-    
-            let textX = startX + totalMatrixWidth - 5; 
-            let matricesBBox = vis.svg.node().getBBox();
-            let textY = startY + categoryIndex * (rows * spacing + matrixPadding) + rows * spacing / 2 + 5;
-    
+            let irSurPercentage = Math.round(((irSurDots / totalDots) * 100));
+
+            let textX = startX + totalMatrixWidth - 5;
+            let textY = startY + categoryIndex * (rows * spacing + matrixPadding) + rows * spacing / 2 - 25;
+
             vis.svg.append("text")
                 .attr("id", `percentage-text-${category}`)
                 .attr("x", textX)
                 .attr("y", textY)
-                .attr("fill", "#9E788F") 
-                .attr("font-size", "40") 
-                .attr("font-weight", "bold") 
-                .attr("dominant-baseline", "middle") 
+                .attr("fill", "#9E788F")
+                .attr("font-size", "40")
+                .attr("font-weight", "bold")
+                .attr("dominant-baseline", "middle")
                 .text(`${irSurPercentage}%`);
 
             const descriptions = [
@@ -262,12 +278,13 @@ class DotMatrix {
             descriptions.forEach((line, i) => {
                 vis.svg.append("text")
                     .attr("x", textX)
-                    .attr("y", textY + 20 + i * 20 + 20) 
-                    .attr("font-size", "23") 
-                    .attr("text-transform", "uppercase") 
+                    .attr("y", textY + 35 + i * 20)
+                    .attr("font-size", "23")
+                    .attr("text-transform", "uppercase")
                     .text(line);
             });
         });
+
     }
     
 

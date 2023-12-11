@@ -1,41 +1,46 @@
-/* * * * * * * * * * * * * *
-*           MAIN           *
-* * * * * * * * * * * * * */
+/**
+ * Main Script
+ *
+ * This script initializes and manages the main visualization components and handles user interactions.
+ */
 
+// Declare variables for visualization instances
 let myMapVis;
 let myBarVis;
-let heatmapVis; 
+let heatmapVis;
 let myAreaVis;
-let myInnovVis; 
-// load data using promises
-let promises = [
+let myInnovVis;
 
-    d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json"), // already projected -> you can just scale it to fit your browser window
-    d3.csv("data/ev-registration-counts-by-state.csv"),
-    d3.csv("data/solar_power.csv"),
-    d3.csv("data/water_conservation_data.csv"),
-    d3.csv("data/solarData-area.csv"), 
-    d3.json("data/airports.json"), 
-    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"), 
-    d3.csv("data/countries_emissions_ids.csv"), 
-    d3.tsv("data/world-110m-country-names.tsv")
+// Load data using promises
+let promises = [
+    d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-albers-10m.json"), // USA map data
+    d3.csv("data/ev-registration-counts-by-state.csv"), // Electric vehicle registration data
+    d3.csv("data/solar_power.csv"), // Solar power data
+    d3.csv("data/water_conservation_data.csv"), // Water conservation data
+    d3.csv("data/solarData-area.csv"), // Solar data for area chart
+    d3.json("data/airports.json"), // Airports data
+    d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json"), // World map data
+    d3.csv("data/countries_emissions_ids.csv"), // Countries emissions data
+    d3.tsv("data/world-110m-country-names.tsv"), // World country names data
 ];
+
+// Wait for all promises to resolve
 Promise.all(promises)
     .then(function (data) {
-        console.log("in promise")
-        initMainPage(data)
+        // Initialize the main page with data
+        initMainPage(data);
     })
     .catch(function (err) {
-        console.log("error here")
-        console.log(err)
+        console.log("Error loading data:", err);
     });
 
-
-$(document).on('click', '.icon-item', function() {
+// Event listener for clicking icon buttons
+$(document).on('click', '.icon-item', function () {
+    // Remove 'icon-clicked' class from all icons and add it to the clicked icon
     $('.icon-item').removeClass('icon-clicked');
     $(this).addClass('icon-clicked');
 
-
+    // Determine the selected metric based on the clicked icon
     let metric;
     if (this.id === 'water_button') {
         metric = "Water Conservation";
@@ -45,30 +50,32 @@ $(document).on('click', '.icon-item', function() {
         metric = "Electric Vehicles";
     }
 
+    // Update the selected category for all visualization instances
     updateCategory(metric);
 });
 
+// Function to update the selected category for all visualizations
 function updateCategory(metric) {
-
     let selectedCategory = getSelectedCategory(metric);
-    
-    console.log(selectedCategory)
 
+    // Update the selected category for each visualization instance
     myMapVis.selectedCategory = selectedCategory;
     myBarVis.selectedCategory = selectedCategory;
     myAreaVis.selectedCategory = selectedCategory;
     heatmapVis.selectedCategory = selectedCategory;
-    myInnovVis.selectedCategory = selectedCategory; 
+    myInnovVis.selectedCategory = selectedCategory;
 
-    myInnovVis.updateVis(); 
+    // Update the visualizations
+    myInnovVis.updateVis();
     myMapVis.updateVis();
     myBarVis.updateVis();
     heatmapVis.updateVis();
     myAreaVis.updateVis();
 }
 
+// Map metric names to corresponding category names
 function getSelectedCategory(metric) {
-    switch(metric) {
+    switch (metric) {
         case "Water Conservation":
             return "waterUsage";
         case "Solar Panels":
@@ -76,66 +83,77 @@ function getSelectedCategory(metric) {
         case "Electric Vehicles":
             return "evCount";
         default:
-            return ""; 
+            return "";
     }
 }
 
-
+// Initialize the main page with visualizations and data processing
 function initMainPage(allDataArray) {
-    console.log("initMainPage")
+    console.log("initMainPage");
+
+    // Create instances of various visualization components
     myMapVis = new MapVis('mapDiv', allDataArray[0], allDataArray[1], allDataArray[2], allDataArray[3]);
-    myGlobeVis = new GlobeVis('globeDiv', allDataArray[7], allDataArray[6], allDataArray[8])
+    myGlobeVis = new GlobeVis('globeDiv', allDataArray[7], allDataArray[6], allDataArray[8]);
     myBarVis = new BarVis('barDiv', allDataArray[1], allDataArray[2], allDataArray[3]);
+
+    // Load and process CSV data for heatmap visualization
     d3.csv("data/solar-data-region.csv", row => {
         row.Year = +row.Year;
         row.Generation = +row.Generation;
         return row;
     }).then((data) => {
         console.log(data);
-
         heatmapVis = new Heatmap("my_dataviz", data);
     });
+
     myAreaVis = new StackedAreaChart("areaDiv", allDataArray[4]);
 
+    // Process water data for the innovation visualization
     let processedWaterData = processDataForInnovVis(allDataArray[3]);
-    let processedMatrixData = processDataForMatrixVis(allDataArray[3]); 
-   
+
+    // Process water data for the matrix visualization
+    let processedMatrixData = processDataForMatrixVis(allDataArray[3]);
+
+    // Create instances of the innovation and dot matrix visualizations
     myInnovVis = new InnovVis('innovDiv', processedWaterData);
-    myDotMatrix = new DotMatrix('matrixDiv', processedMatrixData); 
+    myDotMatrix = new DotMatrix('matrixDiv', processedMatrixData);
 
+    // Create an instance of the score calculator
     scoreCalculator = new ScoreCalculator('statesScores', allDataArray[1], allDataArray[2], allDataArray[3]);
-
 }
 
+// Handle changes in selected states for visualizations
 function stateChange(selectedStates) {
-
-    
-    
     console.log("state change:", selectedStates);
 
-
+    // Update selected states for the bar chart visualization and trigger data wrangling
     myBarVis.selectedStates = selectedStates;
-    myBarVis.wrangleData(); 
+    myBarVis.wrangleData();
 
+    // Update selected states for the stacked area chart visualization and trigger data wrangling
     myAreaVis.selectedStates = selectedStates;
     myAreaVis.wrangleData();
 
+    // Update selected states for the heatmap visualization and trigger data wrangling
     heatmapVis.selectedStates = selectedStates;
     heatmapVis.wrangleData();
 
-    myInnovVis.state = selectedStates[selectedStates.length-1]; 
-    myInnovVis.wrangleData(); 
+    // Update selected state for the innovation visualization and trigger data wrangling
+    myInnovVis.state = selectedStates[selectedStates.length - 1];
+    myInnovVis.wrangleData();
 
-    scoreCalculator.states = selectedStates; 
+    // Update selected states for the score calculator and trigger data wrangling
+    scoreCalculator.states = selectedStates;
     scoreCalculator.wrangleData();
 
-    populateDropdown(selectedStates); 
-    
+    // Populate the dropdown list with selected states
+    populateDropdown(selectedStates);
 }
 
+// Populate the dropdown list with selected states for user interaction
 function populateDropdown(selectedStates) {
     const dropdown = document.getElementById('state-dropdown');
-    dropdown.innerHTML = ''; 
+    dropdown.innerHTML = '';
     selectedStates.forEach(state => {
         const option = document.createElement('option');
         option.value = state;
@@ -151,14 +169,15 @@ function populateDropdown(selectedStates) {
     dropdownContainer.style.display = 'block';
 }
 
-document.getElementById('state-dropdown').addEventListener('change', function() {
+// Handle change in the selected state from the dropdown list
+document.getElementById('state-dropdown').addEventListener('change', function () {
     const selectedState = this.value;
-    myInnovVis.state = selectedState; 
-    myInnovVis.wrangleData(); 
+    myInnovVis.state = selectedState;
+    myInnovVis.wrangleData();
 });
 
+// Process water data for the innovation visualization
 function processDataForInnovVis(waterData) {
-
     let groupedByState = d3.groups(waterData, d => d.State);
 
     let summedByState = groupedByState.map(([state, values]) => {
@@ -185,8 +204,8 @@ function processDataForInnovVis(waterData) {
     return summedByState;
 }
 
+// Process water data for the matrix visualization
 function processDataForMatrixVis(waterData) {
-
     let sums = waterData.reduce((acc, curr) => {
         acc["IR"]["IrTot"] += +curr["IR-IrTot"];
         acc["IR"]["IrSur"] += +curr["IR-IrSur"];
@@ -209,7 +228,7 @@ function processDataForMatrixVis(waterData) {
         "IC": { "IrTot": 0, "IrSur": 0, "IrMic": 0, "IrSpr": 0 },
         "IG": { "IrTot": 0, "IrSur": 0, "IrMic": 0, "IrSpr": 0 }
     });
-    
+
     let formattedData = {
         "IR": { "total": sums["IR"]["IrTot"] },
         "IC": { "total": sums["IC"]["IrTot"] },

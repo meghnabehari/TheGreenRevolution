@@ -1,3 +1,8 @@
+/* 
+    HANDLES ALL THE BUTTONS FOR THE ENTIRE WEBPAGE
+
+*/
+
 
 $(document).on('click', '#nextButton', function(){
     fullpage_api.moveTo('sixth', 1);
@@ -20,7 +25,7 @@ $(document).on('click', '#backButton', function(){
 
 
 $(document).on('click', '#scoreButton', function(){
-    fullpage_api.moveTo('seventh', 1);
+    fullpage_api.moveTo('ninth', 1);
   });
 
 
