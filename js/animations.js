@@ -1,4 +1,5 @@
 
+
 new fullpage('#fullpage', {
   autoScrolling:true,
   navigation: true,
@@ -39,12 +40,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
   observer.observe(sectionTwoText);
 });
-
-
-// var typed = new Typed('#section-two-text', {
-//   strings: ["On November 4th, 2016, 196 parties entered the Paris Agreement", "The goal? Keep the global temperature change below 2 degrees C"],
-//   typeSpeed: 60
-// });
 
 
 // COUNT UP CODE
@@ -165,7 +160,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var merge = function (obj) {
       for ( var prop in obj ) {
         if ( Object.prototype.hasOwnProperty.call( obj, prop ) ) {
-          // If deep merge and property is an object, merge properties
           if ( deep && Object.prototype.toString.call(obj[prop]) === '[object Object]' ) {
             extended[prop] = extend( true, extended[prop], obj[prop] );
           } else {

@@ -11,7 +11,7 @@ class MapVis {
         this.evData = evData;
         this.waterData = waterData;
         this.solarData = solarData;
-        this.colorRange = ["#143109", "#D0D6B3"];
+        this.colorRange = ["#143109", "#1C450D"];
         this.selectedCategory = 'evCount';
         this.selectedStates = [];
         this.initVis();
@@ -63,9 +63,6 @@ class MapVis {
             .attr('class', "tooltip")
             .style("opacity", 0);
 
-        //console.log("SVG Element:", vis.svg);
-        //console.log("GeoJSON Data:", vis.US);    
-
         vis.wrangleData();
 
     }
@@ -74,14 +71,10 @@ class MapVis {
 
         let vis = this;
 
-        //console.log('category', vis.selectedCategory);
-
         // prepare ev data by de-stringing Registration_Count
         vis.evData.forEach(d => {
             d.RegistrationCount = +d.RegistrationCount; // convert to number
         });
-
-        //.log("evData:", vis.evData);
 
         // prepare water data by grouping all rows by state
         vis.waterData = Array.from(d3.group(vis.waterData, d => d.State), ([key, value]) => ({key, value}))
@@ -118,6 +111,10 @@ class MapVis {
                 waterUsage += +entry['TotalGroundwaterWithdrawals'];
             });
 
+            if (stateName === 'Alabama') {
+                solarCount = 0;
+            }
+
             // populate the final data structure
             vis.stateInfo.push(
                 {
@@ -140,7 +137,7 @@ class MapVis {
 
         vis.colorScale = d3.scaleSequential()
             .domain(d3.extent(vis.stateInfo, d => d[vis.selectedCategory])) 
-            .interpolator(t => d3.interpolateRgb("white", "#252815")(t));
+            .interpolator(t => d3.interpolateRgb("#A1B690", "#1C450D")(t));
             
         let legendRectWidth = 300;
         let legendRectHeight= 20;
@@ -188,48 +185,16 @@ class MapVis {
         .join("path")
             .attr("fill", d => {
                 const stateData = vis.stateInfo.find(info => info.State === d.properties.name);
-
-                //console.log('state data #1', stateData);
-                //console.log("step 1,", vis.selectedCategory);
-
-                d.originalFill = stateData ? vis.colorScale(stateData[vis.selectedCategory]) : "#ccc";
-                 
-                //console.log("#1", d.originalFill)
+        d.originalFill = stateData ? vis.colorScale(stateData[vis.selectedCategory]) : "#ccc";
                 return d.originalFill; })    
                
 
         .attr("stroke", "#143109")
         .attr("stroke-width", 1)
         .on('mouseover', function(event, d) {
-
-            
-            // let selectedState = d.properties.name
-
-            // let stateData = {}
-            // vis.stateInfo.forEach(info => {
-            //         if (d.properties.name === info.state)
-            //         {
-            //             stateData = state;
-            //         }
-
-            // } )
-
-            const stateDataMO = vis.stateInfo.find(info => info.State === d.properties.name);
-    
-
-             
-            //console.log('state data #2', stateDataMO);
-            // show tooltip
+            const stateDataMO = vis.stateInfo.find(info => info.State === d.properties.name);       
             vis.tooltip
                 .style("opacity", 1)
-                .html(`
-                <div style="border: thin solid grey; border-radius: 0; background: white; padding: 1rem">
-                    <h3>${stateDataMO.State}</h3>
-                    <p>EV Registration Count: ${stateDataMO.evCount} </p>
-                    <p>Solar Count (Thousand Megawatthours): ${stateDataMO.solarCount} </p>
-                    <p>Water Usage (Mgal/d): ${stateDataMO.waterUsage} </p>
-                </div>
-                `)
                 .style("left", (event.pageX) + "px")
                 .style("top", (event.pageY + 30) + "px");
         })
@@ -240,7 +205,7 @@ class MapVis {
         .on('click', function (event, d) {
             // Check if the state is already selected
             const isSelected = vis.selectedStates.includes(d.properties.name);
-            //console.log('#1', isSelected);
+          
         
             if (isSelected) {
               // Deselect the state
@@ -261,10 +226,4 @@ class MapVis {
 
 }
 
-/*
-TO MAYBE INCLUDE IN TOOLTIP: 
- <p>EV Registration Count: ${stateData.evCount} </p>
-                    <p>Solar Count: ${stateData.solarCount} </p>
-                    <p>Water Usage: ${stateData.waterUsage} </p>
-*/
 

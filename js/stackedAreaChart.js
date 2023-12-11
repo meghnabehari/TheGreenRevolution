@@ -1,35 +1,20 @@
 class StackedAreaChart {
 
-    // constructor method to initialize StackedAreaChart object
     constructor(parentElement, data) {
         this.parentElement = parentElement;
         this.data = data;
         console.log('solar new', this.data);
         this.displayData = [];
         this.selectedStates = []; 
-        this.colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a']
+        this.colors = this.colors = ['#FFFFFF', '#143109', '#EFEFEF', '#AAAE7F', '#5F4554', '#D0D6B3', '#87924F', '#3B2B34', '#8F8F8F', '#555D32', '#9E788F', '#44313C', '#484B30', '#525252', '#303220']
         this.selectedCategory = 'evCount';
         this.initVis();
     
-        //let colors = ['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a'];
-    
-        // grab all the keys from the key value pairs in data (filter out 'year' ) to get a list of categories
-        //this.dataCategories = Object.keys(this.data[0]).filter(d=>d !== "Year")
-    
-        // prepare colors for range
-        //let colorArray = this.dataCategories.map( (d,i) => {
-           // return colors[i%10]
-        //})
-        // Set ordinal color scale
-        //this.colorScale = d3.scaleOrdinal()
-            //.domain(this.dataCategories)
-            //.range(colorArray);
+     
     }
     
     
-        /*
-         * Method that initializes the visualization (static content, e.g. SVG area or axes)
-         */
+      
         initVis(){
                 let vis = this;
             
@@ -43,10 +28,10 @@ class StackedAreaChart {
             
                 console.log('date', vis.data);
             
-                vis.margin = {top: 20, right: 50, bottom: 20, left: 50};
-            vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
-            vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
-
+                vis.margin = {top: 20, right: 20, bottom: 40, left: 80};
+            
+                vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
+                vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
             
                 // Scales and axes
                 vis.x = d3.scaleTime()
@@ -75,8 +60,18 @@ class StackedAreaChart {
             
                 vis.svg.append("g")
                     .attr("class", "y-axis axis");
-            
-                // TO-DO: (Filter, aggregate, modify data)
+
+                vis.tooltip = d3.select("#" + vis.parentElement)
+                    .append("div")
+                    .style("opacity", 0)
+                    .attr("class", "tooltip")
+                    .style("background-color", "white")
+                    .style("border", "solid")
+                    .style("border-width", "2px")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px");
+        
+        
                 vis.wrangleData();
             }
     
@@ -96,48 +91,28 @@ class StackedAreaChart {
 
           console.log('selected states stack', vis.solarFiltered)
 
-          //vis.dataCategories = Object.keys(vis.solarFiltered[0]).filter(d => d = "State")
-          //console.log('categories', vis.dataCategories);
-            
-            //vis.displayData = vis.stackedData;
-
             vis.sumstat = d3.group(vis.solarFiltered, d => d.Date);
     
-
+    
             // Update the visualization
             vis.updateVis();
         }
     
-        /*
-         * The drawing function - should use the D3 update sequence (enter, update, exit)
-         * Function parameters only needed if different kinds of updates are needed
-         */
+
         updateVis(){
 
             let vis = this;
 
             if(vis.selectedCategory === 'solarCount'){
 
-            /*vis.x = d3.scaleLinear()
-                .domain(d3.extent(vis.solarFiltered, function(d) { return d.Date; }))
-                .range([ 0, vis.width ]);
-            vis.svg.append("g")
-                .attr("transform", `translate(0, ${vis.height})`)
-                vis.svg.select(".x-axis").call(d3.axisBottom(vis.x));
-
-            // Add Y axis
-            vis.y = d3.scaleLinear()
-                .range([vis.height, 0 ]);
-            vis.svg.append("g")
-                vis.svg.select(".y-axis").call(d3.axisLeft(vis.y)); */
-
-            //vis.stackedData = d3.stack()
-                //.keys(vis.stateAbbreviations)(vis.sumstat);
-               
-
-            //let stack = d3.stack()
-                //.keys(vis.stateAbbreviations);
-
+                if (vis.selectedStates.length === 0) {
+                        // If not populated, hide or remove the rectangles and axes
+                        vis.chart.selectAll(".heatmap-rect").remove();
+                        vis.svg.select('.x-axis').style('display', 'none');
+                        vis.svg.select('.y-axis').style('display', 'none');
+                        vis.svg.selectAll('.axis-label').style('display', 'none');
+                        return; // Exit the function
+                    }
 
         // Convert the Map to an array of objects
             let dataArray = Array.from(vis.sumstat, ([key, value]) => ({ Date: key, ...Object.fromEntries(value.map(d => [d.State, d.Count])) }));
@@ -154,16 +129,10 @@ class StackedAreaChart {
                 .value((d, key) => d[key])
                 (dataArray);
 
-            // ... (rest o
-
             let colorArray = vis.stateAbbreviations.map( (d,i) => {
                 return vis.colors[i%10]
             })
 
-            //vis.stackedData = stack(vis.solarFiltered);
-            //vis.stackedData = stack(vis.solarFiltered);
-            
-            //d3.stack().keys(vis.stateAbbreviations)(vis.solarFiltered);
             console.log('stacked data', vis.stackedData);
 
             vis.colorScale = d3.scaleOrdinal()
@@ -186,45 +155,57 @@ class StackedAreaChart {
 
             vis.svg.select(".y-axis").call(vis.yAxis);
 
-            /*vis.svg
-                .selectAll("mylayers")
-                .data(vis.stackedData)
-                .join("path")
-                .style("fill", function(d) { return vis.colorScale(d.key); })
-                .attr("d", d3.area()
-                    .x(function(d, i) { return vis.x(d.data.Date); })
-                    .y0(function(d) { return vis.y(d[0]); })
-                    .y1(function(d) { return vis.y(d[1]); })
-                ) */
+            vis.svg.append("text")
+                .attr("class", "axis-label")
+                .attr("transform", "rotate(-90)")
+                .attr("y", 0 - vis.margin.left)
+                .attr("x", 0 - (vis.height / 2))
+                .attr("dy", "2em")
+                .style("text-anchor", "middle")
+                .text("Solar Generation (thousand MWh)");
 
-                
-                
-                //, function(d) {
-                //return d3.max(d, function(e) {
-                //return e[1];
-                //});
-                //})
-                //]);
+            // Append the x-axis label
+             vis.svg.append("text")
+                .attr("class", "axis-label")
+                .attr("transform", "translate(" + (vis.width / 2) + " ," + (vis.height + vis.margin.top) + ")")
+                .style("text-anchor", "middle")
+                .attr("dx", "-0.3em")
+                .attr("dy", "0.8em")
+                .text("Year");
                  
             // Draw the layers
-            let categories = vis.svg.selectAll(".area")
+             let categories = vis.svg.selectAll(".area")
                 .data(vis.stackedData);
-                 
+
             categories.enter().append("path")
                 .attr("class", "area")
                 .merge(categories)
                 .style("fill", d => vis.colorScale(d.key))
                 .attr("d", d => vis.area(d))
-                
-            categories.exit().remove();
+                .on("mouseover", function (event, d) {
+                    console.log('state', d.key)
+                    // Show tooltip on mouseover
+                    vis.tooltip.transition()
+                        .duration(200)
+                        .style("opacity", 0.9);
+                    vis.tooltip.html("State: " +  d.key) 
+                        .style("left", (event.pageX) + "px")
+                        .style("top", (event.pageY / 2) + "px");
+                })
+                .on("mouseout", function () {
+                    // Hide tooltip on mouseout
+                    vis.tooltip.transition()
+                        .duration(500)
+                        .style("opacity", 0);
+                });
 
-                // Call axis functions with the new domain
+            categories.exit().remove();
         }
      else {
         vis.svg.selectAll(".area").remove();
         vis.svg.select('.x-axis').selectAll("*").remove();
-        // Remove y-axis
         vis.svg.select('.y-axis').selectAll("*").remove();
+        vis.svg.selectAll('.axis-label').remove();
     }
 
     }

@@ -12,10 +12,6 @@ class GlobeVis {
         this.countryData = countryData; 
         this.countryNames = countryNames;
 
-        // define colors
-        // this.colors = ['#EFEFEF', '#D0D6B3', '#AAAE7F', '#143109']
-        
-
 
         this.initVis()
     }
@@ -78,7 +74,6 @@ class GlobeVis {
     wrangleData() {
             let vis = this;
 
-            // Check here for why some data isn't appearing
             vis.nameByID = {};
             vis.countryNames.forEach(d => {
                 vis.nameByID[d.id] = d.name;
@@ -181,9 +176,6 @@ class GlobeVis {
                     .transition()
                     .duration(200)
                     .style('opacity', 0.9);
-                    // .html(vis.nameByID[d.id] || '')
-                    // .style('left', (event.pageX + 10) + 'px')
-                    // .style('top', (event.pageY + 10) + 'px');
             })
             .on('mouseout', function() {
                 d3.select(this)

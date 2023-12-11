@@ -44,10 +44,12 @@
             </div>
         </div>
         <div class="section" id="dashboard">
-            <h1>State Comparison Tool</h1>
+            <h1>Green Energy Exploration</h1>
             <div class="container-fluid">
                 <!-- ICONS ROW -->
+                <div class="caption">1. Click to see solar generation or electric vehicle registration</div>
                 <div class="row justify-content-center" id="icons-row">
+                
                     <div class="col-auto">
                         <div class="icon-item" id="solar_panels">
                             <i class="fa-sharp fa-solid fa-solar-panel fa-4x display-icon"></i>
@@ -61,12 +63,12 @@
                         <span class="icon-caption">Electric Vehicles</span>
                     </div>
                 </div>
-        
+                <div class="caption">2. Click states on the map to see how they compare on their adoption of green energy</div>
+                <div class="caption">(Click states again to deselect)</div>
                 <!-- MAP ROW -->
                 <div class="row" id="map-row">
                     <div class="col">
                         <div id="mapDiv">
-                            <!-- Map goes here -->
                         </div>
                     </div>
                 </div>
@@ -87,6 +89,12 @@
                     </div>
                 </div>
             </div>
+           
+        </div>
+        <div class="section">
+            <h1>What about water?</h1>
+            <div class="caption">Click below to see how your selected states use their water</div>
+            <button id="nextButton" class="button-74" role="button">See Water Usage</button>
         </div>
         
              
@@ -98,6 +106,8 @@
             <div id="innovDiv" class="align-self-center water-div" style="background: none;">
                
             </div>
+            <div class="caption">How is America as a whole using its water?</div>
+            <button id="americaWaterButton" class="button-74" role="button">See Water Usage</button>
         </div>
 
         <div class="section">
@@ -128,22 +138,6 @@
         </div>
        
     </div>
-
-    <!--
-
-	<div class="container">
-        <div class="row">
-			<div class="col-md-6">
-				<div id="area-chart"></div>
-			</div>
-			<div class="col-md-6">
-				<div id="bar-chart"></div>
-			</div>
-		</div>
-	</div> -->
-
-
-
 
 	<!-- embedding JS libraries -->
 	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>

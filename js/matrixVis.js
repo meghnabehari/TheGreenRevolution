@@ -167,16 +167,16 @@ class DotMatrix {
         let rows = 4;
         let cols = 8;
     
-        let spacing = 30;
-        let matrixPadding = 50;
-        let dotRadius = 13; 
+        let spacing = 25;
+        let matrixPadding = 18;
+        let dotRadius = 8; 
         let borderWidth = 1; 
 
         let totalMatrixWidth = cols * spacing;
         let totalMatrixHeight = (rows * spacing + matrixPadding) * Object.keys(vis.displayData).length - matrixPadding; 
     
         let startX = (vis.width - totalMatrixWidth) / 2 - 55;
-        let startY = (vis.height - totalMatrixHeight) - vis.height/20;
+        let startY = (vis.height - totalMatrixHeight + 70)
 
         const categoryNames = {
             "IR": "residential land",

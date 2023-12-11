@@ -77,11 +77,6 @@ class InnovVis {
     
     }
 
-    /**
-     * The drawing function - should use the D3 update sequence (enter, update, exit)
-     * Function parameters only include the updating elements (enter and update),
-     * not the exit elements.
-     */
     updateVis() {
         let vis = this; 
        

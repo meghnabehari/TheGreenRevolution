@@ -80,6 +80,7 @@ li {
     position: relative; 
 }
 
+/* ICONS BUTTON STYLING*/
 .icons-container {
     position: absolute; 
     top: 20; 
@@ -130,7 +131,8 @@ li {
     padding: 2rem;
     color: black;
     background: #D0D6B3; 
-    text-align: center;;
+    text-align: center;
+    width:100%; 
 
 }
 
@@ -179,6 +181,8 @@ text {
     
 }
 
+
+/* SCORE CALC STYLING */
 #statesScores {
     display: flex; 
     flex-wrap: wrap; 
@@ -221,12 +225,12 @@ text {
 /* STYLING FOR TTTLES AND HEADERS */
 h1 {
     font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
-    font-size: 2.5rem; 
+    font-size: 2.2rem; 
     font-weight: 700; 
     color: #333; 
     text-transform: uppercase; 
     letter-spacing: 1px; 
-    padding: 20px 0; 
+    padding: 10px 0; 
     margin: 0 auto;
     text-align: center;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1); 
@@ -337,7 +341,7 @@ h4  {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80%;
+    height: 70%;
     width: 100%;
 
 }
@@ -423,13 +427,14 @@ h4  {
 
 #mapDiv {
     background: none; 
-    height: 350px; 
+    height: 30vh; 
 }
 
 #data-visualizations-row .col {
+
     padding: 10px; 
-    height: 250px; 
-    width: 300px; 
+    height: 100%; 
+    width: 100%;
     border-radius: 4px; 
     background-color: rgba(255, 255, 255, 0.5);
 }
@@ -437,7 +442,7 @@ h4  {
 .inner-div.custom-center {
     margin: auto;
     width: 90%; 
-    height: 200px; 
+    height: 30vh; 
 }
 
 .icon-caption {

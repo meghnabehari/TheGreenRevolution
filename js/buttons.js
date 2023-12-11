@@ -1,4 +1,14 @@
-$(document).on('click', '#launchButton', function(){
+
+$(document).on('click', '#nextButton', function(){
+    fullpage_api.moveTo('sixth', 1);
+  });
+
+  $(document).on('click', '#americaWaterButton', function(){
+    fullpage_api.moveTo('seventh', 1);
+  });
+
+
+  $(document).on('click', '#launchButton', function(){
     fullpage_api.moveTo('fourth', 1);
     
   });
@@ -10,7 +20,7 @@ $(document).on('click', '#backButton', function(){
 
 
 $(document).on('click', '#scoreButton', function(){
-    fullpage_api.moveTo('eighth', 1);
+    fullpage_api.moveTo('seventh', 1);
   });
 
 

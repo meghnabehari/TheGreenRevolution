@@ -12,7 +12,7 @@ class BarVis {
         this.waterData = waterData;
         this.solarData = solarData;
         this.selectedStates = [];
-        this.selectedCategory = 'waterUsage'
+        this.selectedCategory = 'evCount'
         this.initVis();
 
         
@@ -22,9 +22,9 @@ class BarVis {
 
         let vis = this;
 
-        vis.margin = {top: 20, right: 20, bottom: 20, left: 80};
-        vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
-        vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
+        vis.margin = {top: 20, right: 20, bottom: 50, left: 80};
+         vis.width = document.getElementById(vis.parentElement).getBoundingClientRect().width - vis.margin.left - vis.margin.right;
+         vis.height = document.getElementById(vis.parentElement).getBoundingClientRect().height - vis.margin.top - vis.margin.bottom;
 
         // init drawing area
         vis.svg = d3.select("#" + vis.parentElement).append("svg")
@@ -64,6 +64,8 @@ class BarVis {
             .attr('class', 'x-axis-label')
             .attr('transform', `translate(${vis.width / 2}, ${vis.height + 40})`)
             .style('text-anchor', 'middle')
+            .style('font-size', '13px')
+            .attr("dy", "0.75em")
             .text('State'); // X-axis label
 
         vis.svg.append('text')
@@ -72,7 +74,12 @@ class BarVis {
             .attr('y', -60)
             .attr('x', -vis.height / 2)
             .style('text-anchor', 'middle')
-            .text('Registration Count'); // Y-axis label     
+            .text('Registration Count'); // Y-axis label 
+            
+        // append tooltip
+        vis.tooltip = d3.select("body").append('div')
+            .attr('class', "tooltip")
+            .style("opacity", 0);    
 
         this.wrangleData();
     }
@@ -81,7 +88,6 @@ class BarVis {
         let vis = this;
 
         let stateAbbreviations = vis.selectedStates.map(state => nameConverter.getAbbreviation(state));
-        //console.log("states in wrangle", selectedStates)
 
 
         vis.evDataFiltered = vis.evData.filter(d => {
@@ -155,6 +161,8 @@ class BarVis {
 
     updateVis() {
         let vis = this;
+
+        const showAxes = vis.selectedStates.length > 0;
     
         // Sort the stateInfo array based on the selected category in descending order
         vis.stateInfo.sort((a, b) => b[vis.selectedCategory] - a[vis.selectedCategory]);
@@ -168,7 +176,7 @@ class BarVis {
         const maxBarWidth = vis.xScale.bandwidth(); // Maximum available bar width
     
         // Set a maximum width for the bars to ensure they don't get too wide
-        const maxWidthForBars = 200; // Adjust as needed
+        const maxWidthForBars = 200;
     
         let barWidth;
         if (numBars <= 3) {
@@ -184,26 +192,38 @@ class BarVis {
     
         vis.yScale.domain([0, d3.max(vis.stateInfo, d => d[vis.selectedCategory])]);
     
-        // Update the x-axis and y-axis based on the new domains
-        vis.svg.select('.x-axis').call(vis.xAxis);
-        vis.svg.select('.y-axis').call(vis.yAxis);
+
+        const xAxis = vis.svg.select('.x-axis')
+            .style('display', showAxes ? 'block' : 'none')
+            .call(vis.xAxis);
+
+        // Rotate x-axis labels
+        xAxis.selectAll('text')
+            .style('text-anchor', 'end')
+            .attr('transform', 'rotate(-30)');
+
+        vis.svg.select('.y-axis').style('display', showAxes ? 'block' : 'none').call(vis.yAxis);
     
         // Determine the y-axis title based on the selectedCategory
         let yAxisTitle;
         if (vis.selectedCategory === 'evCount') {
             yAxisTitle = 'EV Registration Count';
         } else if (vis.selectedCategory === 'solarCount') {
-            yAxisTitle = 'Solar Count (Thousand Megawatthours)';
+            yAxisTitle = 'Solar Generation (thousand MWh)';
         } else if (vis.selectedCategory === 'waterUsage') {
             yAxisTitle = 'Water Usage (Mgal/d)';
         } else {
-            yAxisTitle = ''; // Handle other categories as needed
+            yAxisTitle = ''; 
         }
     
         // Update the y-axis label based on the selectedCategory
         vis.svg.select('.y-axis-label')
-            .text(yAxisTitle);
-    
+            .text(yAxisTitle)
+            .style('display', showAxes ? 'block' : 'none');
+
+        vis.svg.select('.x-axis-label')
+            .style('display', showAxes ? 'block' : 'none'); 
+
         // add title
         vis.svg.select('.title.bar-title').select('text')
             .text("Electric Vehicle Registration Count By State")

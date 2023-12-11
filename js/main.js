@@ -65,7 +65,6 @@ function updateCategory(metric) {
     myBarVis.updateVis();
     heatmapVis.updateVis();
     myAreaVis.updateVis();
-    // Check if the selected category is 'solarCount'
 }
 
 function getSelectedCategory(metric) {
@@ -81,15 +80,12 @@ function getSelectedCategory(metric) {
     }
 }
 
-//console.log('solar Data', allDataArray[2]);
 
 function initMainPage(allDataArray) {
     console.log("initMainPage")
     myMapVis = new MapVis('mapDiv', allDataArray[0], allDataArray[1], allDataArray[2], allDataArray[3]);
     myGlobeVis = new GlobeVis('globeDiv', allDataArray[7], allDataArray[6], allDataArray[8])
-   // let myBarVis;
     myBarVis = new BarVis('barDiv', allDataArray[1], allDataArray[2], allDataArray[3]);
-    //myBarVis = new BarVis('barDiv', allDataArray[1]);
     d3.csv("data/solar-data-region.csv", row => {
         row.Year = +row.Year;
         row.Generation = +row.Generation;
@@ -97,7 +93,6 @@ function initMainPage(allDataArray) {
     }).then((data) => {
         console.log(data);
 
-        // Create a new heatmap
         heatmapVis = new Heatmap("my_dataviz", data);
     });
     myAreaVis = new StackedAreaChart("areaDiv", allDataArray[4]);
@@ -168,7 +163,6 @@ function processDataForInnovVis(waterData) {
 
     let summedByState = groupedByState.map(([state, values]) => {
         let sums = values.reduce((acc, curr) => {
-            // acc["DO-WDelv"] += +curr["DO-WDelv"];
             acc["IR-CUsFr"] += +curr["IR-CUsFr"];
             acc["PT-CUTot"] += +curr["PT-CUTot"];
             acc["IN-Wtotl"] += +curr["IN-Wtotl"];
@@ -178,7 +172,6 @@ function processDataForInnovVis(waterData) {
             return acc;
         }, {
             "State": state,
-            // "DO-WDelv": 0,
             "IR-CUsFr": 0,
             "PT-CUTot": 0,
             "IN-Wtotl": 0,
