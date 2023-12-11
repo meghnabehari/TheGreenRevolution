@@ -1,0 +1,183 @@
+<!doctype html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Sustainability Assessment</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+	<link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.css" />
+
+</head>
+<body>
+    <div id="fullpage">
+        <!--LANDING PAGE-->
+        <div class="section" id="home-section">
+
+            <div class="title-container">
+                <div class="title">THE GREEN</div>
+                <div class="title">REVOLUTION</div>
+                <div class="caption">Unveiling America's Journey Towards Sustainable Living</div>
+
+            </div>
+        </div>
+        <div class="section" id="section-2">
+            <span id="section-two-text"></span>
+            <div class="caption hidden-content">View the top CO2 emitters of 2022 below</div>
+            <div id="globeDiv" class="hidden-content" style="height: 71vh; width: 100%;"></div>
+           
+        </div>
+        <div class="section" id="launch">
+            <div class="launch-page">    
+                <h1>The United States <em>should</em> be leading the green initiative</h1>
+                <h5>But in November 2020, the United States Government exited the Paris Agreement</h5>
+                <br>
+                <h5>In February 2021, they re-entered</h5>
+                <br>
+                <h5>Is this lack of commitment detrimental to the global effort to reduce the effects of climate change?</h5>
+                <br>
+                <h5>Click below to find out and examine the US's progress in sustainability</h5>
+                <button id="launchButton" class="button-74" role="button" >Start Exploring</button>
+
+            </div>
+        </div>
+        <div class="section" id="dashboard">
+            <h1>State Comparison Tool</h1>
+            <div class="container-fluid">
+                <!-- ICONS ROW -->
+                <div class="row justify-content-center" id="icons-row">
+                    <div class="col-auto">
+                        <div class="icon-item" id="solar_panels">
+                            <i class="fa-sharp fa-solid fa-solar-panel fa-4x display-icon"></i>
+                        </div>
+                        <span class="icon-caption">Solar Power Usage</span>
+                    </div>
+                    <div class="col-auto" >
+                        <div class="icon-item" id="electric_vehicles">
+                            <i class="fa-sharp fa-solid fa-car-battery fa-4x display-icon"></i>
+                        </div>
+                        <span class="icon-caption">Electric Vehicles</span>
+                    </div>
+                </div>
+        
+                <!-- MAP ROW -->
+                <div class="row" id="map-row">
+                    <div class="col">
+                        <div id="mapDiv">
+                            <!-- Map goes here -->
+                        </div>
+                    </div>
+                </div>
+        
+                <!-- DATA VISUALIZATIONS ROW -->
+                <div class="row" id="data-visualizations-row">
+                    <div class="col" id="areaDiv-col">
+                        <div id="areaDiv" class="inner-div custom-center">
+                        </div>
+                    </div>
+                    <div class="col" id="barDiv-col">
+                        <div id="barDiv" class="inner-div custom-center">
+                        </div>
+                    </div>
+                    <div class="col" id="my_dataviz-col">
+                        <div id="my_dataviz" class="inner-div custom-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+             
+        <div class="section" id="innov-vis">
+            <h1>Select on a State to View How Their Water is Used</h1>
+            <div id="dropdown-container" style="display: none;">
+                <select id="state-dropdown"></select>
+            </div>
+            <div id="innovDiv" class="align-self-center water-div" style="background: none;">
+               
+            </div>
+        </div>
+
+        <div class="section">
+            <h1>How is America Using its Water?</h3>
+            <h3>Irrigation is the greatest source of water usage in the country. Click below to see how each type of irrigation
+                is used in the United States
+            </h4>
+          <div id="matrixDiv" style="height: 70vh; width:100%;"></div>
+        </div>
+        <div class="section">
+            <h2>Examine more states or get a summary of each states sustainability measure</h2>
+            <button id="backButton" class="button-74" role="button">Back to Map</button>
+            <button id="scoreButton" class="button-74" role="button">Overall Assessment</button>
+        </div>
+        <div class="section">
+            <h1>Sustainability Scores</h1>
+            <div class="caption">Scores are determined based on how abudnant solar panels and EVs are in the state, as well as how efficient their water conservation is</div>
+            <div id="statesScores"></div>
+            <!-- <h1 id="score-display">test</h1> -->
+        </div>
+        <div class="section">
+                <h2 class="countup"><span class="js-countup" id="scoreDisplay">196</span> countries</h2>
+                <h2 class="countup"><span class="js-countup" id="scoreDisplay">15</span> years</h2>
+                <h2 class="countup"><span class="js-countup" id="scoreDisplay">2</span> degrees</h2>
+            <h2> Can we reach the goals of the Paris Agreement? 
+            </h2>
+            <h4>Trend says yes, but we've got a ways to go</h4>
+        </div>
+       
+    </div>
+
+    <!--
+
+	<div class="container">
+        <div class="row">
+			<div class="col-md-6">
+				<div id="area-chart"></div>
+			</div>
+			<div class="col-md-6">
+				<div id="bar-chart"></div>
+			</div>
+		</div>
+	</div> -->
+
+
+
+
+	<!-- embedding JS libraries -->
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullPage.js/3.1.2/fullpage.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+    <script src="https://kit.fontawesome.com/1ea1accdd8.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/countup.js/2.0.7/countup.min.js"></script>
+
+    
+
+	<!-- d3 -->
+	<script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://d3js.org/d3-array.v2.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v2.min.js"></script>
+
+    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+    <script src="https://d3js.org/topojson.v2.min.js"></script>
+    <script src="https://d3js.org/d3-geo.v1.min.js"></script>
+
+	<!-- Your implementation -->
+    <script src="js/buttons.js"></script>
+	<script src="js/barVis.js"></script>
+	<script src="js/areachart.js"></script>
+	<script src="js/main.js"></script>
+    <script src="js/animations.js"></script>
+    <script src="js/mapVis.js"></script>
+    <script src="js/helpers.js"></script>
+    <script src="js/globeVis.js"></script>
+    <script src="js/heatMap.js"></script>
+    <script src="js/stackedAreaChart.js"></script>
+    <script src="js/innovVis.js"></script>
+    <script src="js/scoreCalc.js"></script>
+    <script src="js/matrixVis.js"></script>
+</body>
+</html>
