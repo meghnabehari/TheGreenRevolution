@@ -68,7 +68,7 @@ class BarVis {
             .attr('class', 'x-axis-label')
             .attr('transform', `translate(${vis.width / 2}, ${vis.height + 40})`)
             .style('text-anchor', 'middle')
-            .style('font-size', '13px')
+            .style('font-size', '12px')
             .attr("dy", "0.75em")
             .text('State'); // X-axis label
 
@@ -78,6 +78,7 @@ class BarVis {
             .attr('y', -60)
             .attr('x', -vis.height / 2)
             .style('text-anchor', 'middle')
+            .style("font-size", "12px")
             .text('Registration Count'); // Y-axis label
 
         // Append tooltip
@@ -243,6 +244,7 @@ updateVis() {
     vis.svg.select('.title.bar-title').select('text')
         .text("Electric Vehicle Registration Count By State")
         .attr('transform', `translate(${vis.width / 2}, 10)`)
+        .style("font-size", "14px")
         .attr('text-anchor', 'middle');
 
     // Select all the bars, bind data, and update their attributes

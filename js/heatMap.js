@@ -111,13 +111,7 @@ class Heatmap {
         if (vis.selectedCategory === 'solarCount') {
 
             // If no states are selected, hide or remove the rectangles and axes
-            if (vis.selectedStates.length === 0) {
-                vis.chart.selectAll(".heatmap-rect").remove();
-                vis.svg.select('.x-axis').style('display', 'none');
-                vis.svg.select('.y-axis').style('display', 'none');
-                vis.svg.selectAll('.axis-label').style('display', 'none');
-                return; // Exit the function
-            }
+          
 
             // Create Y and X axes
             vis.yAxis = d3.axisLeft()
@@ -153,6 +147,7 @@ class Heatmap {
                 .attr("x", 0 - (vis.height / 2))
                 .attr("dy", "2em")
                 .style("text-anchor", "middle")
+                .style("font-size", "12px")
                 .text("Year");
 
             // Append the x-axis label
@@ -163,6 +158,7 @@ class Heatmap {
                 .style('font-size', '13px')
                 .attr("dx", "-0.3em")
                 .attr("dy", "0.9em")
+                .style("font-size", "12px")
                 .text("Region");
 
             // Append a group for the title
@@ -175,7 +171,7 @@ class Heatmap {
                 .attr("x", vis.width/2)
                 .attr("y", -1)
                 .attr("text-anchor", "middle") // Center the text horizontally
-                .style("font-size", "16px") // Adjust the font size as needed
+                .style("font-size", "12px") // Adjust the font size as needed
                 .text("Solar Generation Across Region and Time"); // Set the title text        
 
             // Use selectAll to select existing rectangles, and then join the data
@@ -273,19 +269,36 @@ class Heatmap {
                             .style("stroke", "black");
                     }
 
+
                     // Reset tooltip on mouseout
                     vis.tooltip.style("opacity", 0);
                 });
 
             // Remove rectangles that are no longer needed
             rects.exit().remove();
+
+            
+
+            if (vis.selectedStates.length === 0) {
+                // If not populated, hide or remove the rectangles and axes
+                //vis.svg.selectAll("*").remove();
+                vis.svg.selectAll(".heatmap-rect").remove();
+                vis.svg.selectAll('.axis').style('display', 'none');
+                vis.svg.selectAll('.axis-label').remove(); 
+                vis.svg.selectAll('.heatmap-title').remove();
+                //vis.svg.selectAll('.axis-label').style('display', 'none');
+                return; // Exit the function
+            }
+      
         } else {
             // If the category is not 'solarCount', hide or remove the heatmap rectangles
             vis.chart.selectAll(".heatmap-rect").remove();
             vis.svg.selectAll('.x-axis').remove();
             vis.svg.selectAll('.y-axis').remove();
-            vis.svg.selectAll('.axis-label').remove();
-            vis.svg.selectAll('.heatmap-title').remove();
+            vis.svg.selectAll('.axis-label').remove(); 
+            vis.svg.selectAll('.heatmap-title').remove(); 
+
+
         }
     }
 }
