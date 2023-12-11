@@ -76,7 +76,7 @@ class ScoreCalculator {
             console.log(waterUsage);              
 
 
-            const weights = { evCount: 0.8, solarCount: 0.8, waterUsage: 0.5};
+            const weights = { evCount: 0.7, solarCount: 0.5, waterUsage: 0.2};
 
             const normalizedEvCount = evCount / maxEvCount;
             const normalizedSolarCount = solarCount / maxSolarCount;
@@ -129,9 +129,9 @@ class ScoreCalculator {
 
             if (score < 20) {
                 scoreDiv.style.color = 'red';
-            } else if (score >= 20 && score < 50) {
+            } else if (score >= 20 && score < 35) {
                 scoreDiv.style.color = '#E1CE7A';
-            } else if (score >= 50) {
+            } else if (score >= 35) {
                 scoreDiv.style.color = 'green';
             }
             stateDiv.appendChild(stateNameDiv);
